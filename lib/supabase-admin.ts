@@ -36,6 +36,22 @@ export const createDatabaseConnection = async (dbData: object) => {
   }
 }
 
+export const createRecord = async (table:string, recordData: object) => {
+  try {
+    const { data, error } = await supabase
+      .from(table)
+      .insert(recordData)
+      .select()
+
+    if (error) throw error;
+
+    return data[0]?.id;
+  } catch (error) {
+    console.error("Failed to create database connection:", error);
+    throw error; // This will propagate the error up to the calling function
+  }
+}
+
 export const deleteRecord = async (table: string, id: string) => {
   try {
     const { error } = await supabase
@@ -101,9 +117,9 @@ export const getAllRecords = async (table: string, portalId: string) => {
   try {
     const { data, error } = await supabase
       .from(table)
-      .select('*, databases!inner(*)')
+      .select('*, databases(*)')
       .eq('hubspot_portal_id', portalId)
-      .eq('databases.connection_status', 'valid')
+      // .eq('databases.connection_status', 'valid')
 
     if (error) throw error;
     return data;

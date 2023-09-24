@@ -21,7 +21,6 @@ export function DatabaseCreateButton({
   const router = useRouter()
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false); // New state to control modal visibility
-  console.log(portalId)
   async function onClick() {
     setIsModalOpen(true);
   }

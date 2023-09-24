@@ -5,6 +5,7 @@ import { DashboardHeader } from "@/components/header"
 import { DashboardShell } from "@/components/shell"
 import { getAllRecords, getHubspotPortalId } from "@/lib/supabase-admin";
 import { RecordItem } from "@/components/record-item";
+import { RecordCreateButton } from "@/components/record-create-button";
 
 export const metadata = {
   title: "Contacts Configuration",
@@ -22,7 +23,7 @@ export default async function ContactsPage() {
   return (
     <DashboardShell>
       <DashboardHeader heading="Contact Cards" text="Manage your contact cards">
-        {/* <DatabaseCreateButton portalId={hubspotPortalId}/> */}
+        <RecordCreateButton portalId={hubspotPortalId} recordType="contacts"/>
       </DashboardHeader>
       {records?.length ? (
           <div className="divide-y divide-border rounded-md border">
@@ -37,7 +38,7 @@ export default async function ContactsPage() {
             <EmptyPlaceholder.Description>
               You haven&apos;t configured any card connections yet, let&apos;s add one!
             </EmptyPlaceholder.Description>
-            {/* <DatabaseCreateButton variant="outline" portalId={hubspotPortalId}/> */}
+            <RecordCreateButton variant="outline" portalId={hubspotPortalId} recordType="contacts"/>
           </EmptyPlaceholder>
         )} 
     </DashboardShell>

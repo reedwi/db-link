@@ -28,7 +28,7 @@ export function RecordItem({ record, recordType }: RecordItemProps) {
           href={`/dashboard/${recordType}/${record.id}`}
           className="font-semibold hover:underline"
         >
-          {record.name}
+          {record.name || "Unnamed Card"}
         </Link>
         <div>
           <p className="text-sm text-muted-foreground">

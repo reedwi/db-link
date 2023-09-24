@@ -630,6 +630,7 @@ export interface Database {
   }
 }
 
+export type ConnectionStatus = Database["public"]["Enums"]["connection_status"]
 export type DatabaseConnection = Database["public"]["Tables"]["databases"]["Row"]
 export type Deal = Database["public"]["Tables"]["deals"]["Row"]
 export type Contact = Database["public"]["Tables"]["contacts"]["Row"]
