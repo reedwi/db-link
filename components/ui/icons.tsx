@@ -4,6 +4,7 @@ import {
   Check,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Command,
   CreditCard,
   File,
@@ -27,7 +28,8 @@ import {
   CircleDollarSign,
   Database,
   Building,
-  type Icon as LucideIcon,
+  XCircle,
+  LucideIcon,
 } from "lucide-react"
 
 export type Icon = LucideIcon
@@ -38,6 +40,7 @@ export const Icons = {
   spinner: Loader2,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
+  chevronDown: ChevronDown,
   trash: Trash,
   post: FileText,
   page: File,
@@ -58,6 +61,7 @@ export const Icons = {
   database: Database,
   flame: Flame,
   money: CircleDollarSign,
+  xcircle: XCircle,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"

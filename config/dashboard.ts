@@ -11,7 +11,7 @@ export const dashboardConfig: DashboardConfig = {
     },
     {
       title: "Database Connections",
-      href: "/dashboard/database",
+      href: "/dashboard/databases",
       icon: "settings",
     },
     {
@@ -28,6 +28,11 @@ export const dashboardConfig: DashboardConfig = {
       title: "Deals",
       href: "/dashboard/deals",
       icon: "money",
+    },
+    {
+      title: "Tickets",
+      href: "/dashboard/tickets",
+      icon: "help",
     },
     {
       title: "Billing",

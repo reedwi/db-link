@@ -3,6 +3,7 @@ import { MainNav } from "@/components/main-nav"
 import { DashboardNav } from "@/components/nav"
 import { SiteFooter } from "@/components/site-footer"
 import { dashboardConfig } from "@/config/dashboard"
+import { getHubspotPortalId } from "@/lib/supabase-admin";
 
 export default async function ProtectedLayout({
   children
@@ -14,6 +15,8 @@ export default async function ProtectedLayout({
   if(!userId) {
     redirectToSignIn();
   }
+
+  const hubspotPortalId = await getHubspotPortalId(userId!);
 
   return (
     <div className="flex min-h-screen flex-col space-y-6">

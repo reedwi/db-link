@@ -5,7 +5,8 @@ import { EmptyPlaceholder } from "@/components/empty-placeholder"
 import { DashboardHeader } from "@/components/header"
 // import { PostItem } from "@/components/post-item"
 import { DashboardShell } from "@/components/shell"
-import { getHubspotPortalId } from "@/lib/supabaseAdmin";
+import { getHubspotPortalId } from "@/lib/supabase-admin";
+import { Button } from "@/components/ui/button";
 // import prismadb from "@/lib/prismadb";
 
 export const metadata = {
@@ -20,7 +21,8 @@ export default async function DashboardPage() {
   }
 
 
-  const portalId = getHubspotPortalId(userId!);
+  const portalId = await getHubspotPortalId(userId!);
+  console.log(portalId);
 
   if (portalId === null) {
     // show install hubspot app
@@ -36,11 +38,11 @@ export default async function DashboardPage() {
       ) : ( */}
           <EmptyPlaceholder>
             <EmptyPlaceholder.Icon name="post" />
-            <EmptyPlaceholder.Title>No proposals generated</EmptyPlaceholder.Title>
+            <EmptyPlaceholder.Title>HubSpot App Not Installed</EmptyPlaceholder.Title>
             <EmptyPlaceholder.Description>
               You haven&apos;t installed the HubSpot app yet. Let&apos;s start there!
             </EmptyPlaceholder.Description>
-            {/* <ProposalCreateButton variant="outline" /> */}
+            <Button><a href="https://en.wikipedia.org/wiki/Next.js">Install in HubSpot</a></Button>
           </EmptyPlaceholder>
         {/* )} */}
     </DashboardShell>
