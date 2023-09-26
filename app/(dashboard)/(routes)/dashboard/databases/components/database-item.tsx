@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-import { DatabaseConnection } from "@/types/supabase"
+import { DatabaseConnection } from "@/types"
 import { formatDate } from "@/lib/utils"
 import { Skeleton } from "@/components/ui/skeleton"
 import { DatabaseOperations } from "./database-operations"

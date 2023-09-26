@@ -2,7 +2,20 @@
 import type { Icon } from "lucide-react"
 
 import { Icons } from "@/components/ui/icons"
+import { Database } from "./supabase"
 
+
+export type GenericRecord = {
+  name: string;
+  hubspotProperty: string;
+  connectionId: string;
+  query: string;
+}
+export type ConnectionStatus = Database["public"]["Enums"]["connection_status"]
+export type DatabaseConnection = Database["public"]["Tables"]["databases"]["Row"]
+export type Deal = Database["public"]["Tables"]["deals"]["Row"]
+export type Contact = Database["public"]["Tables"]["contacts"]["Row"]
+export type Company = Database["public"]["Tables"]["companies"]["Row"]
 
 export type NavItem = {
   title: string

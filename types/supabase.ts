@@ -56,7 +56,9 @@ export interface Database {
           hubspot_portal_id: number | null
           hubspot_property: string | null
           id: string
+          name: string | null
           query: string | null
+          status: Database["public"]["Enums"]["connection_status"] | null
         }
         Insert: {
           column_map?: Json | null
@@ -65,7 +67,9 @@ export interface Database {
           hubspot_portal_id?: number | null
           hubspot_property?: string | null
           id?: string
+          name?: string | null
           query?: string | null
+          status?: Database["public"]["Enums"]["connection_status"] | null
         }
         Update: {
           column_map?: Json | null
@@ -74,7 +78,9 @@ export interface Database {
           hubspot_portal_id?: number | null
           hubspot_property?: string | null
           id?: string
+          name?: string | null
           query?: string | null
+          status?: Database["public"]["Enums"]["connection_status"] | null
         }
         Relationships: [
           {
@@ -111,7 +117,9 @@ export interface Database {
           hubspot_portal_id: number | null
           hubspot_property: string | null
           id: string
+          name: string | null
           query: string | null
+          status: Database["public"]["Enums"]["connection_status"] | null
         }
         Insert: {
           column_map?: Json | null
@@ -120,7 +128,9 @@ export interface Database {
           hubspot_portal_id?: number | null
           hubspot_property?: string | null
           id?: string
+          name?: string | null
           query?: string | null
+          status?: Database["public"]["Enums"]["connection_status"] | null
         }
         Update: {
           column_map?: Json | null
@@ -129,7 +139,9 @@ export interface Database {
           hubspot_portal_id?: number | null
           hubspot_property?: string | null
           id?: string
+          name?: string | null
           query?: string | null
+          status?: Database["public"]["Enums"]["connection_status"] | null
         }
         Relationships: [
           {
@@ -160,52 +172,52 @@ export interface Database {
       }
       databases: {
         Row: {
+          connection_message: string | null
           connection_status:
             | Database["public"]["Enums"]["connection_status"]
             | null
-          connection_message: string | null
           created_at: string
           database_name: string | null
           host: string | null
           hubspot_portal_id: number | null
           id: string
+          name: string | null
           password: string | null
           port: number | null
           type: string | null
           username: string | null
-          name: string | null
         }
         Insert: {
+          connection_message?: string | null
           connection_status?:
             | Database["public"]["Enums"]["connection_status"]
             | null
-          connection_message?: string | null
           created_at?: string
           database_name?: string | null
           host?: string | null
           hubspot_portal_id?: number | null
           id?: string
+          name?: string | null
           password?: string | null
           port?: number | null
           type?: string | null
           username?: string | null
-          name?: string | null
         }
         Update: {
+          connection_message?: string | null
           connection_status?:
             | Database["public"]["Enums"]["connection_status"]
             | null
-          connection_message?: string | null
           created_at?: string
           database_name?: string | null
           host?: string | null
           hubspot_portal_id?: number | null
           id?: string
+          name?: string | null
           password?: string | null
           port?: number | null
           type?: string | null
           username?: string | null
-          name?: string | null
         }
         Relationships: [
           {
@@ -230,7 +242,9 @@ export interface Database {
           hubspot_portal_id: number | null
           hubspot_property: string | null
           id: string
+          name: string | null
           query: string | null
+          status: Database["public"]["Enums"]["connection_status"] | null
         }
         Insert: {
           column_map?: Json | null
@@ -239,7 +253,9 @@ export interface Database {
           hubspot_portal_id?: number | null
           hubspot_property?: string | null
           id?: string
+          name?: string | null
           query?: string | null
+          status?: Database["public"]["Enums"]["connection_status"] | null
         }
         Update: {
           column_map?: Json | null
@@ -248,7 +264,9 @@ export interface Database {
           hubspot_portal_id?: number | null
           hubspot_property?: string | null
           id?: string
+          name?: string | null
           query?: string | null
+          status?: Database["public"]["Enums"]["connection_status"] | null
         }
         Relationships: [
           {
@@ -327,6 +345,67 @@ export interface Database {
           trial_start?: string | null
         }
         Relationships: []
+      }
+      tickets: {
+        Row: {
+          column_map: Json | null
+          created_at: string
+          database_id: string | null
+          hubspot_portal_id: number | null
+          hubspot_property: string | null
+          id: string
+          name: string | null
+          query: string | null
+          status: Database["public"]["Enums"]["connection_status"] | null
+        }
+        Insert: {
+          column_map?: Json | null
+          created_at?: string
+          database_id?: string | null
+          hubspot_portal_id?: number | null
+          hubspot_property?: string | null
+          id?: string
+          name?: string | null
+          query?: string | null
+          status?: Database["public"]["Enums"]["connection_status"] | null
+        }
+        Update: {
+          column_map?: Json | null
+          created_at?: string
+          database_id?: string | null
+          hubspot_portal_id?: number | null
+          hubspot_property?: string | null
+          id?: string
+          name?: string | null
+          query?: string | null
+          status?: Database["public"]["Enums"]["connection_status"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tickets_database_id_fkey"
+            columns: ["database_id"]
+            referencedRelation: "databases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tickets_database_id_fkey"
+            columns: ["database_id"]
+            referencedRelation: "decrypted_databases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tickets_hubspot_portal_id_fkey"
+            columns: ["hubspot_portal_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["hubspot_portal_id"]
+          },
+          {
+            foreignKeyName: "tickets_hubspot_portal_id_fkey"
+            columns: ["hubspot_portal_id"]
+            referencedRelation: "decrypted_accounts"
+            referencedColumns: ["hubspot_portal_id"]
+          }
+        ]
       }
       wrappers_fdw_stats: {
         Row: {
@@ -410,6 +489,7 @@ export interface Database {
       }
       decrypted_databases: {
         Row: {
+          connection_message: string | null
           connection_status:
             | Database["public"]["Enums"]["connection_status"]
             | null
@@ -419,12 +499,14 @@ export interface Database {
           host: string | null
           hubspot_portal_id: number | null
           id: string | null
+          name: string | null
           password: string | null
           port: number | null
           type: string | null
           username: string | null
         }
         Insert: {
+          connection_message?: string | null
           connection_status?:
             | Database["public"]["Enums"]["connection_status"]
             | null
@@ -434,12 +516,14 @@ export interface Database {
           host?: string | null
           hubspot_portal_id?: number | null
           id?: string | null
+          name?: string | null
           password?: string | null
           port?: number | null
           type?: string | null
           username?: string | null
         }
         Update: {
+          connection_message?: string | null
           connection_status?:
             | Database["public"]["Enums"]["connection_status"]
             | null
@@ -449,6 +533,7 @@ export interface Database {
           host?: string | null
           hubspot_portal_id?: number | null
           id?: string | null
+          name?: string | null
           password?: string | null
           port?: number | null
           type?: string | null
@@ -629,9 +714,3 @@ export interface Database {
     }
   }
 }
-
-export type ConnectionStatus = Database["public"]["Enums"]["connection_status"]
-export type DatabaseConnection = Database["public"]["Tables"]["databases"]["Row"]
-export type Deal = Database["public"]["Tables"]["deals"]["Row"]
-export type Contact = Database["public"]["Tables"]["contacts"]["Row"]
-export type Company = Database["public"]["Tables"]["companies"]["Row"]

@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { DatabaseConnection } from "@/types/supabase"
+import { DatabaseConnection } from "@/types"
 import React, { useState } from "react";
 interface DatabaseConnectionTestCardProps {
   database: DatabaseConnection;
@@ -33,6 +33,7 @@ export const DatabaseConnectionTestCard: React.FC<DatabaseConnectionTestCardProp
   
   const handleTestConnection = async () => {
       try {
+        console.log('here')
         const response = await fetch(`/api/databases/connection-test`, {
           method: "POST",
           headers: {
@@ -52,6 +53,7 @@ export const DatabaseConnectionTestCard: React.FC<DatabaseConnectionTestCardProp
             setErrorMessage(testResult.message);
         }
       } catch (error) {
+        console.log(error)
         setConnectionStatus("error");
         setErrorMessage("An unexpected error occurred.");
       }

@@ -1,12 +1,13 @@
 
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
-import { DatabaseConnection } from "@/types/supabase";
+import { DatabaseConnection } from "@/types";
 import { Client } from "pg";
 import { Connection, createConnection } from 'mysql2/promise';
 import { ConnectionPool } from 'mssql';
 import { updateRecord } from "@/lib/supabase-admin";
 import { table } from "console";
+import { stringifyError } from "next/dist/shared/lib/utils";
 
 export async function POST(req: Request) {
   const { userId } = auth();
@@ -37,8 +38,8 @@ export async function POST(req: Request) {
         return NextResponse.json(connectionResult, { status: 400 });
       }
 
-      updateRecord('databases', databaseConnection.id, { 'connection_status': 'valid', 'connection_message': null})
-      return NextResponse.json(connectionResult, { status: 204 });
+      updateRecord('databases', databaseConnection.id, { 'connection_status': 'valid', 'connection_message': 'it was a success x2'})
+      return NextResponse.json(connectionResult, { status: 200 });
 
   } catch (error) {
       return new NextResponse("Internal error", { status: 500 });
@@ -63,7 +64,7 @@ async function testPostgresConnection(database: DatabaseConnection): Promise<{ s
       return { success: false, message: error.message };
     } else {
         // Handle or return a generic error message if the caught object is not an instance of Error
-        return { success: false, message: "An unexpected error occurred." };
+        return { success: false, message: "An unexpected error occurred" };
     }
   } finally {
       await client.end();
