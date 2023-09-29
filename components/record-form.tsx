@@ -55,7 +55,6 @@ export const RecordForm: React.FC<RecordFormProps> = ({
   const onSubmit = async (values: z.infer<typeof recordSchema>) => {
     try {
       setIsLoading(true);
-      console.log(values)
       const response = await fetch(`/api/contacts/${id}`, {
         method: "PATCH",
         headers: {

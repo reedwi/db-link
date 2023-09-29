@@ -5,6 +5,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { use, useState, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  ColumnDef
+} from "@tanstack/react-table"
+ 
 
 import { toast } from "@/components/ui/use-toast"
 
@@ -24,12 +28,17 @@ import { useRouter } from "next/navigation";
 import { DatabaseConnection } from "@/types";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
+import generateColumns from "@/components/query-test-columns";
+import { DynamicCol } from "@/components/query-test-columns";
+import { DataTable } from "@/components/ui/data-table";
+import CardGeneration from "./card-generation";
 
 
 interface QueryTestDataTableProps {
   id?: string;
   record?: any;
 }
+
 
 export const testValueSchema = z.object({
   testValue: z.string().min(1),
@@ -42,6 +51,8 @@ export const QueryTestDataTable: React.FC<QueryTestDataTableProps> = ({
 }) => {
   const router = useRouter();
   const [loading, setIsLoading] = useState(false);
+  const [tableData, setTableData] = useState<DynamicCol[]>([]);
+  const [tableColumns, setTableColumns] = useState<ColumnDef<DynamicCol>[]>([]); 
   const recordForm = useForm<TestQueryFormValues>({
     resolver: zodResolver(testValueSchema)
   });
@@ -71,11 +82,21 @@ export const QueryTestDataTable: React.FC<QueryTestDataTableProps> = ({
           connectionId: record.connectionId
         }),
       })
-  
+      
       if (response.status === 200) {
+        const data = await response.json();
+        let title;
+        if (data.length > 0) {
+          setTableData(data)
+          const columns = generateColumns(data[0])
+          setTableColumns(columns)
+          title = "Query ran successfully, see results"
+        } else {
+          title = "Query ran successfully, but no data was found for this query."
+        }
         router.refresh();
         return toast({
-          title: "Query ran successfully, see results",
+          title: title,
           variant: "default",
         })
       }
@@ -95,6 +116,7 @@ export const QueryTestDataTable: React.FC<QueryTestDataTableProps> = ({
   };
 
   return (
+    <>
       <div>
         <div className="space-y-4 py-2 pb-4">
           <Form {...recordForm}>
@@ -106,7 +128,7 @@ export const QueryTestDataTable: React.FC<QueryTestDataTableProps> = ({
                   <FormItem>
                     <FormLabel>Test Value</FormLabel>
                     <FormControl>
-                            <Input disabled={ loading } placeholder="Test value for query" {...field || ""} />
+                        <Input disabled={ loading } placeholder="Test value for query" {...field || ""} />
                     </FormControl>
                     <FormMessage></FormMessage>
                     <FormDescription>
@@ -122,5 +144,11 @@ export const QueryTestDataTable: React.FC<QueryTestDataTableProps> = ({
           </Form>
         </div>
       </div>
+      <div>
+        <DataTable data={tableData} columns={tableColumns}/>
+      </div>
+      <Separator />
+      <CardGeneration columnMap={null} columnNames={["TEST", "TEST 1"]}/>
+    </>
   );
 };

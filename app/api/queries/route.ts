@@ -1,7 +1,7 @@
 
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
-import { DatabaseConnection } from "@/types";
+import { DecryptedDatabaseConnection } from "@/types";
 import { Client } from "pg";
 import { Connection, createConnection } from 'mysql2/promise';
 import { ConnectionPool } from 'mssql';
@@ -17,14 +17,14 @@ export async function POST(req: Request) {
   try {
       const body = await req.json();
       const { propertyValue, query, connectionId } = body;
-      const database: DatabaseConnection = await getRecord('databases', connectionId);
+      const database: DecryptedDatabaseConnection = await getRecord('decrypted_databases', connectionId);
       const updatedQuery = query.replace(/{{.*?}}/g, propertyValue);
 
 
       let result;
       switch(database.type) {  // Assuming your database object has a 'type' field to distinguish db types
           case "PostgreSQL":
-              result = await runPostgresQuery(updatedQuery, query);
+              result = await runPostgresQuery(database, updatedQuery);
               break;
           case "MySQL":
               result = await runMySQLQuery(updatedQuery, query);
@@ -49,12 +49,12 @@ export async function POST(req: Request) {
 }
 
 
-async function runPostgresQuery(database: DatabaseConnection, sqlQuery: string): Promise<{ success: boolean, message: string, data?: any }> {
+async function runPostgresQuery(database: DecryptedDatabaseConnection, sqlQuery: string): Promise<{ success: boolean, message: string, data?: any }> {
   const config = {
     host: database.host || undefined,
     port: database.port || undefined,
     user: database.username || undefined, // Remember to change 'username' to 'user'
-    password: database.password || undefined,
+    password: database.decrypted_password || undefined,
     database: database.database_name || undefined
   };
   const client = new Client(config);
@@ -75,14 +75,14 @@ async function runPostgresQuery(database: DatabaseConnection, sqlQuery: string):
 }
 
 
-async function runMySQLQuery(database: DatabaseConnection, sqlQuery: string): Promise<{ success: boolean, message: string, data?: any }> {
+async function runMySQLQuery(database: DecryptedDatabaseConnection, sqlQuery: string): Promise<{ success: boolean, message: string, data?: any }> {
   let connection: Connection | null = null;
   try {
       connection = await createConnection({
           host: database.host!,
           port: database.port!,
           user: database.username!,
-          password: database.password!,
+          password: database.decrypted_password!,
           database: database.database_name!,
       });
 
@@ -103,13 +103,13 @@ async function runMySQLQuery(database: DatabaseConnection, sqlQuery: string): Pr
 
 
 
-async function runSQLServerQuery(database: DatabaseConnection, sqlQuery: string): Promise<{ success: boolean, message: string, data?: any }> {
+async function runSQLServerQuery(database: DecryptedDatabaseConnection, sqlQuery: string): Promise<{ success: boolean, message: string, data?: any }> {
   let pool: ConnectionPool | null = null;
   const config = {
       server: database.host!,
       port: Number(database.port!),
       user: database.username!,
-      password: database.password!,
+      password: database.decrypted_password!,
       database: database.database_name!,
       options: {
           encrypt: true // Use this if you're on Windows Azure
