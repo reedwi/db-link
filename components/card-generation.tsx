@@ -54,10 +54,21 @@ const CardGeneration: React.FC<CardGenerationComponentProps> = ({ columnMap, col
   }, [columnMap, reset]);
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    // Save data to the database
-    console.log(columnMap);
-    // console.log(data);
+    // Transform the data
+    console.log(data)
+    const transformedData = data.rows.reduce((acc, row) => {
+      acc[row.columnName] = {
+        type: row.type,
+        label: row.label,
+      };
+      return acc;
+    }, {} as { [key: string]: { type: string; label: string } });
+  
+    console.log(transformedData);
+  
+    // Save or process the transformed data further...
   };
+  
 
   const handleAddRow = () => {
     setRows((prevRows) => [...prevRows, {}]);
