@@ -36,7 +36,8 @@ export default async function ContactPage({
         name: record.name || "",
         hubspotProperty: record.hubspot_property || "",
         connectionId: record.database_id || "",
-        query: record.query || ""
+        query: record.query || "",
+        columnMap: record.column_map || {}
         // ... (add any other fields if necessary)
       };
     }
@@ -53,6 +54,7 @@ export default async function ContactPage({
       <Separator />
       <MiniHeader heading="Test Query" text="Run a test query so we can ensure we get data and can further configure"/>
       <QueryTestDataTable record={formattedRecord} />
+
     </DashboardShell>
   )
 }

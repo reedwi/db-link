@@ -28,10 +28,11 @@ import { useRouter } from "next/navigation";
 import { DatabaseConnection } from "@/types";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
-import generateColumns from "@/components/query-test-columns";
+import { getColumnNames, generateColumns } from "@/components/query-test-columns";
 import { DynamicCol } from "@/components/query-test-columns";
 import { DataTable } from "@/components/ui/data-table";
-import CardGeneration from "./card-generation";
+import CardGeneration from "@/components/card-generation";
+import { MiniHeader } from "@/components/mini-header";
 
 
 interface QueryTestDataTableProps {
@@ -53,6 +54,7 @@ export const QueryTestDataTable: React.FC<QueryTestDataTableProps> = ({
   const [loading, setIsLoading] = useState(false);
   const [tableData, setTableData] = useState<DynamicCol[]>([]);
   const [tableColumns, setTableColumns] = useState<ColumnDef<DynamicCol>[]>([]); 
+  const [columnLabels, setColumnLabels] = useState<string[]>([]); 
   const recordForm = useForm<TestQueryFormValues>({
     resolver: zodResolver(testValueSchema)
   });
@@ -88,8 +90,10 @@ export const QueryTestDataTable: React.FC<QueryTestDataTableProps> = ({
         let title;
         if (data.length > 0) {
           setTableData(data)
-          const columns = generateColumns(data[0])
+          const columns = generateColumns(data[0]);
           setTableColumns(columns)
+          const labels = getColumnNames(data[0]);
+          setColumnLabels(labels);
           title = "Query ran successfully, see results"
         } else {
           title = "Query ran successfully, but no data was found for this query."
@@ -148,7 +152,8 @@ export const QueryTestDataTable: React.FC<QueryTestDataTableProps> = ({
         <DataTable data={tableData} columns={tableColumns}/>
       </div>
       <Separator />
-      <CardGeneration columnMap={null} columnNames={["TEST", "TEST 1"]}/>
+      <MiniHeader heading="HubSpot Card Properties" text="Configure the data that will show in the HubSpot card. You can add up to 10 distinct fields from the query"/>
+      <CardGeneration columnMap={record.columnMap} columnNames={columnLabels}/>
     </>
   );
 };

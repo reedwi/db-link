@@ -180,7 +180,7 @@ export const RecordForm: React.FC<RecordFormProps> = ({
                   </FormItem>
                 )}
               />
-              <Separator />
+
               <div className="pt-6 flex items-center justify-center w-full">
                 <Button disabled={loading } type="submit">Save</Button>
               </div>

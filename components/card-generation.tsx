@@ -32,11 +32,14 @@ type CardGenerationComponentProps = {
 const CardGeneration: React.FC<CardGenerationComponentProps> = ({ columnMap, columnNames }) => {
   const [rows, setRows] = useState<any[]>([]); // This will store the rows to be displayed
   const [loading, setIsLoading] = useState(false);
-
+  // console.log(columnNames)
   const methods = useForm<FormData>({
     resolver: zodResolver(dynamicFormSchema),
+    defaultValues: {
+      rows: []
+    }
   });
-  const { register, handleSubmit, control, setValue } = methods;
+  const { register, handleSubmit, control, setValue, reset } = methods;
 
   useEffect(() => {
     // If columnMap is not null, set the rows with its data
@@ -46,28 +49,41 @@ const CardGeneration: React.FC<CardGenerationComponentProps> = ({ columnMap, col
         ...columnMap[key],
       }));
       setRows(initialRows);
+      reset({ rows: initialRows });
     }
-  }, [columnMap]);
+  }, [columnMap, reset]);
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     // Save data to the database
-    console.log(data);
+    console.log(columnMap);
+    // console.log(data);
   };
 
   const handleAddRow = () => {
     setRows((prevRows) => [...prevRows, {}]);
   };
 
+  const derivedColumnNames = React.useMemo(() => {
+    const mapKeys = columnMap ? Object.keys(columnMap) : [];
+    const names = columnNames || [];
+    return Array.from(new Set([...mapKeys, ...names])); // Remove duplicates and merge
+  }, [columnMap, columnNames]);
+
   return (
     <Form {...methods}>
       {rows.map((row, index) => (
         <FormItem key={index}>
+          <div className="flex items-center justify-between">
           <FormLabel>Row {index + 1}</FormLabel>
+          </div>
+          <div className="flex space-x-4 items-center">
+          {/* Column Name Select */}
+          <div className="flex-1">
           <FormField
             control={control}
             name={`rows[${index}].columnName` as any}
             render={({ field }) => (
-              <FormItem>
+              <>
                 <FormLabel>Column Name</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                   <FormControl>
@@ -76,7 +92,7 @@ const CardGeneration: React.FC<CardGenerationComponentProps> = ({ columnMap, col
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {columnNames?.map((col) => (
+                    {derivedColumnNames?.map((col) => (
                       <SelectItem key={col} value={col}>
                         {col}
                       </SelectItem>
@@ -84,28 +100,34 @@ const CardGeneration: React.FC<CardGenerationComponentProps> = ({ columnMap, col
                   </SelectContent>
                 </Select>
                 <FormMessage></FormMessage>
-              </FormItem>
+              </>
             )}
           />
+          </div>
+
+          {/* Label Input */}
+          <div className="flex-1">
           <FormField
             name={`rows[${index}].label` as any}
             control={control}
             defaultValue={row.label || ""}
             render={({ field }: { field: FieldValues }) => (
-            <FormControl>
-              <FormLabel>Label</FormLabel>
-              <FormControl>
-                  <Input disabled={ loading } placeholder="Label" {...field || ""} />
-              </FormControl>
-              <FormMessage></FormMessage>
-            </FormControl>
+              <>
+                <FormLabel>Label</FormLabel>
+                <Input disabled={loading} placeholder="Label" {...field} />
+                <FormMessage></FormMessage>
+              </>
             )}
           />
+          </div>
+
+          {/* Type Select */}
+          <div className="flex-1">
           <FormField
             control={control}
             name={`rows[${index}].type` as any}
             render={({ field }) => (
-              <FormItem>
+              <>
                 <FormLabel>Type</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                   <FormControl>
@@ -122,9 +144,21 @@ const CardGeneration: React.FC<CardGenerationComponentProps> = ({ columnMap, col
                   </SelectContent>
                 </Select>
                 <FormMessage></FormMessage>
-              </FormItem>
+              </>
             )}
           />
+          </div>
+          <div className="flex align-self-end">
+          <Button
+            variant="destructive"
+            onClick={() => {
+              setRows((prevRows) => prevRows.filter((_, idx) => idx !== index));
+            }}
+          >
+            Remove
+          </Button>
+          </div>
+          </div>
         </FormItem>
       ))}
       {rows.length < 10 && (

@@ -10,10 +10,19 @@ export type DynamicCol = {
 
 function generateColumns(data: Data): ColumnDef<DynamicCol>[] {
   const keys = Object.keys(data)
+  console.log(keys)
 
   return keys.map((key) => ({
     accessorKey: key,
     header: key,
   }))
 }
-export default generateColumns;
+
+function getColumnNames(data: Data): string[] {
+  const keys = Object.keys(data);
+
+  return keys;
+}
+
+
+export { getColumnNames, generateColumns };
